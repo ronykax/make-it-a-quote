@@ -2,11 +2,14 @@ import "dotenv/config";
 import { App } from "@slack/bolt";
 
 const app = new App({
-    signingSecret: process.env.SLACK_SIGNING_SECRET,
     token: process.env.SLACK_BOT_TOKEN,
+    appToken: process.env.SLACK_APP_TOKEN,
+    socketMode: true,
 });
 
-(async () => {
-    await app.start(6969);
-    console.log("app is online!");
-})();
+app.event("app_mention", async ({ event, say }) => {
+    await say({ text: "hi world!", thread_ts: event.ts });
+});
+
+await app.start();
+console.log("app is online!");
